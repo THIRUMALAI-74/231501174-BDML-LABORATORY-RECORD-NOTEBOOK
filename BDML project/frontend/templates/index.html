@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🏠 House Price Predictor</h1>
+            <p>Predict house prices using advanced machine learning</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Input Form -->
+            <div class="card form-card">
+                <h2>Enter House Details</h2>
+                <form id="predictionForm">
+                    <!-- Overall Quality -->
+                    <div class="form-group">
+                        <label for="overall_qual">
+                            Overall Quality (1-10)
+                            <span class="tooltip">?
+                                <span class="tooltiptext">Overall material and finish quality</span>
+                            </span>
+                        </label>
+                        <input type="number" id="overall_qual" name="overall_qual" 
+                               min="1" max="10" value="7" required>
+                    </div>
+
+                    <!-- Living Area -->
+                    <div class="form-group">
+                        <label for="gr_liv_area">
+                            Living Area (sq ft)
+                            <span class="tooltip">?
+                                <span class="tooltiptext">Above grade living area</span>
+                            </span>
+                        </label>
+                        <input type="number" id="gr_liv_area" name="gr_liv_area" 
+                               min="500" max="10000" value="1500" required>
+                    </div>
+
+                    <!-- First Floor -->
+                    <div class="form-group">
+                        <label for="first_flr_sf">First Floor Area (sq ft)</label>
+                        <input type="number" id="first_flr_sf" name="first_flr_sf" 
+                               min="500" max="5000" value="1000" required>
+                    </div>
+
+                    <!-- Garage Area -->
+                    <div class="form-group">
+                        <label for="garage_area">Garage Area (sq ft)</label>
+                        <input type="number" id="garage_area" name="garage_area" 
+                               min="0" max="2000" value="500" required>
+                    </div>
+
+                    <!-- Garage Cars -->
+                    <div class="form-group">
+                        <label for="garage_cars">Garage Capacity (cars)</label>
+                        <input type="number" id="garage_cars" name="garage_cars" 
+                               min="0" max="5" value="2" required>
+                    </div>
+
+                    <!-- Basement Area -->
+                    <div class="form-group">
+                        <label for="total_bsmt_sf">Basement Area (sq ft)</label>
+                        <input type="number" id="total_bsmt_sf" name="total_bsmt_sf" 
+                               min="0" max="5000" value="1000" required>
+                    </div>
+
+                    <!-- Year Built -->
+                    <div class="form-group">
+                        <label for="year_built">Year Built</label>
+                        <input type="number" id="year_built" name="year_built" 
+                               min="1800" max="2025" value="2000" required>
+                    </div>
+
+                    <!-- Year Remodeled -->
+                    <div class="form-group">
+                        <label for="year_remod_add">Year Remodeled</label>
+                        <input type="number" id="year_remod_add" name="year_remod_add" 
+                               min="1800" max="2025" value="2010" required>
+                    </div>
+
+                    <!-- Bathrooms -->
+                    <div class="form-group">
+                        <label for="full_bath">Full Bathrooms</label>
+                        <input type="number" id="full_bath" name="full_bath" 
+                               min="0" max="5" value="2" required>
+                    </div>
+
+                    <!-- Bedrooms -->
+                    <div class="form-group">
+                        <label for="bedroom_abv_gr">Bedrooms</label>
+                        <input type="number" id="bedroom_abv_gr" name="bedroom_abv_gr" 
+                               min="0" max="10" value="3" required>
+                    </div>
+
+                    <!-- Kitchens -->
+                    <div class="form-group">
+                        <label for="kitchen_abv_gr">Kitchens</label>
+                        <input type="number" id="kitchen_abv_gr" name="kitchen_abv_gr" 
+                               min="1" max="3" value="1" required>
+                    </div>
+
+                    <!-- Total Rooms -->
+                    <div class="form-group">
+                        <label for="totrms_abv_grd">Total Rooms Above Grade</label>
+                        <input type="number" id="totrms_abv_grd" name="totrms_abv_grd" 
+                               min="0" max="20" value="7" required>
+                    </div>
+
+                    <!-- Fireplaces -->
+                    <div class="form-group">
+                        <label for="fireplaces">Fireplaces</label>
+                        <input type="number" id="fireplaces" name="fireplaces" 
+                               min="0" max="5" value="1" required>
+                    </div>
+
+                    <!-- Lot Area -->
+                    <div class="form-group">
+                        <label for="lot_area">Lot Area (sq ft)</label>
+                        <input type="number" id="lot_area" name="lot_area" 
+                               min="1000" max="100000" value="10000" required>
+                    </div>
+
+                    <!-- Overall Condition -->
+                    <div class="form-group">
+                        <label for="overall_cond">Overall Condition (1-10)</label>
+                        <input type="number" id="overall_cond" name="overall_cond" 
+                               min="1" max="10" value="5" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-predict" id="predictBtn">
+                        Predict Price
+                    </button>
+
+                    <!-- Reset Button -->
+                    <button type="button" class="btn-reset" onclick="resetForm()">
+                        Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Card -->
+            <div class="card result-card" id="resultCard" style="display: none;">
+                <h2>Prediction Result</h2>
+                
+                <div class="result-content">
+                    <div class="price-display">
+                        <div class="price-label">Estimated Price</div>
+                        <div class="price-value" id="predictedPrice">$0</div>
+                    </div>
+
+                    <div class="confidence-interval">
+                        <div class="interval-label">95% Confidence Interval</div>
+                        <div class="interval-values">
+                            <span class="interval-lower" id="lowerBound">$0</span>
+                            <span class="interval-separator">-</span>
+                            <span class="interval-upper" id="upperBound">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="prediction-details">
+                        <p><strong>Model Used:</strong> <span id="modelUsed">-</span></p>
+                        <p><strong>Timestamp:</strong> <span id="timestamp">-</span></p>
+                    </div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-secondary" onclick="showForm()">
+                        Make Another Prediction
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Predicting house price...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <div class="error-content">
+                    <span class="error-icon">⚠️</span>
+                    <span id="errorText">An error occurred</span>
+                </div>
+                <button class="btn-close" onclick="closeError()">×</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>House Price Prediction System v1.0 | Built with FastAPI & Machine Learning</p>
+            <p><a href="/docs" target="_blank">API Documentation</a></p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
